@@ -4,6 +4,7 @@
       <TodoItem
           v-for="(todo, index) of todos"
           v-bind:todo="todo"
+          v-bind:index="index"
           :key="index"
           @remove-todo="removeTodo"
       />
