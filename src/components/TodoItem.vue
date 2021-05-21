@@ -2,10 +2,11 @@
   <li>
     <span v-bind:class="{done: todo.completed}">
       <input type="checkbox"
+             v-model="todo.completed"
              @change="todo.completed = !todo.completed"
       >
       <strong>{{index + 1}}</strong>
-      {{todo.title}}
+      {{todo.title | upercase}}
     </span>
     <button class="rm"
             @click="$emit('remove-todo', todo.id)"
@@ -22,7 +23,12 @@ export default {
     },
     index: Number
   },
-name: "TodoItem"
+  filters: {
+    upercase(value) {
+      return value.toUpperCase();
+    }
+  },
+  name: "TodoItem"
 }
 </script>
 

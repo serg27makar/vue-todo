@@ -3,37 +3,64 @@
     <h2>Todo application</h2>
     <router-link to="/">Home</router-link>
     <hr>
-    <AddTodo @add-todo="addTodo"/>
+    <AddTodo @add-todo="addTodo" />
+    <select v-model="filter">
+      <option value="all">All</option>
+      <option value="completed">Completed</option>
+      <option value="not-completed">Not completed</option>
+    </select>
     <hr>
+    <Loader v-if="loading" />
     <TodoList
-        v-bind:todos="todos"
+        v-else-if="todos.length"
+        v-bind:todos="filterTodos"
         @remove-todo="removeTodo"
     />
+    <p v-else>No todo</p>
   </div>
 </template>
 
 <script>
 import TodoList from '@/components/TodoList'
 import AddTodo from "@/components/AddTodo";
+import Loader from "@/components/Loader";
 export default {
   name: 'todos',
   data() {
     return {
-      todos: [
-        {id: 1, title: 'todo 1', completed: false},
-        {id: 2, title: 'todo 2', completed: false},
-        {id: 3, title: 'todo 3', completed: false},
-      ]
+      todos: [],
+      loading: true,
+      filter: 'all'
     }
   },
   components: {
+    Loader,
     AddTodo,
     TodoList
   },
   mounted() {
     fetch('https://jsonplaceholder.typicode.com/todos/?_limit=5')
         .then(response => response.json())
-        .then(json => this.todos = json)
+        .then(json => {
+          this.todos = json;
+          this.loading = false;
+        })
+  },
+  // watch: {
+  //   filter(value) {
+  //     console.log(value)
+  //   }
+  // },
+  computed: {
+    filterTodos() {
+      if (this.filter === "completed") {
+        return this.todos.filter(t => t.completed);
+      }
+      if (this.filter === "not-completed") {
+        return this.todos.filter(t => !t.completed);
+      }
+      return this.todos;
+    }
   },
   methods: {
     removeTodo(id) {
