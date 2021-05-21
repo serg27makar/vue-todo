@@ -46,6 +46,7 @@ export default {
           this.loading = false;
         })
   },
+
   // watch: {
   //   filter(value) {
   //     console.log(value)
@@ -62,6 +63,7 @@ export default {
       return this.todos;
     }
   },
+
   methods: {
     removeTodo(id) {
       this.todos = this.todos.filter(t => t.id !== id)
